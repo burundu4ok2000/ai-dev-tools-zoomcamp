@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h2>Create TODO</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label for="id_title">Title:</label><br>
+      <input type="text" id="id_title" name="title" required>
+    </div>
+
+    <div style="margin-top: 8px;">
+      <label for="id_description">Description:</label><br>
+      <textarea id="id_description" name="description" rows="3"></textarea>
+    </div>
+
+    <div style="margin-top: 8px;">
+      <label for="id_due_date">Due date:</label><br>
+      <input type="datetime-local" id="id_due_date" name="due_date">
+    </div>
+
+    <div style="margin-top: 8px;">
+      <label>
+        <input type="checkbox" name="is_done">
+        Is done
+      </label>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <button type="submit">Add TODO</button>
+    </div>
+  </form>
+
+  <hr>
+
+  <h2>My TODOs</h2>
+
+  {% if todos %}
+    <ul>
+      {% for todo in todos %}
+        <li>
+          {% if todo.is_done %}✅{% else %}⬜{% endif %}
+          <strong>{{ todo.title }}</strong>
+          {% if todo.due_date %}
+            — due: {{ todo.due_date }}
+          {% endif %}
+          {% if todo.description %}
+            <br><small>{{ todo.description }}</small>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No TODOs yet — add your first one above.</p>
+  {% endif %}
+{% endblock %}
